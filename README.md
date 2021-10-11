@@ -11,7 +11,7 @@ The docker image needs to be parametrized with environment variables.
 | ------------- | -----:|---------:|
 | WSHUB_INFOR_WS_URL           | **Yes** |  |
 | WSHUB_INFOR_TENANT         | No |  |
-| WSHUB_INFOR_ORGANIZATION_CODE         | No |  |
+| WSHUB_INFOR_ORGANIZATION         | No |  |
 
 
 Please not that for the moment the database connection is not supported and the non-mandatory parameters above won't be considered.
@@ -21,7 +21,7 @@ You can for instance store your environment variables in a dedicated .env file:
 ```
 WSHUB_INFOR_WS_URL=<url>
 INFOR_TENANT=<tenant>
-WSHUB_INFOR_ORGANIZATION_CODE=<organization>
+WSHUB_INFOR_ORGANIZATION=<organization>
 ```
 
 
