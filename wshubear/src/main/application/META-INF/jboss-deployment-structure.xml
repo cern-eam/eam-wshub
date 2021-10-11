@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2">
+    <sub-deployment name="wshubejb-1.0.0.jar">
+        <dependencies>
+            <module name="org.jboss.ws.cxf.jbossws-cxf-client" services="import" />
+            <module name="org.apache.cxf.impl">
+                <imports>
+                    <include path="META-INF" />
+                    <include path="META-INF/cxf" />
+                </imports>
+            </module>
+        </dependencies>
+    </sub-deployment>
+</jboss-deployment-structure>
