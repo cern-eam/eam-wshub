@@ -20,7 +20,7 @@ You can for instance store your environment variables in a dedicated .env file:
 
 ```
 WSHUB_INFOR_WS_URL=<url>
-INFOR_TENANT=<tenant>
+WSHUB_INFOR_TENANT=<tenant>
 WSHUB_INFOR_ORGANIZATION=<organization>
 ```
 
