@@ -87,7 +87,7 @@
 			<dependencies>
 				<dependency>
 					<groupId>ch.cern.cmms</groupId>
-					<artifactId>wshub-cern</artifactId>
+					<artifactId>wshub-opensource</artifactId>
 					<version>${project.version}</version>
 					<scope>compile</scope>
 				</dependency>
