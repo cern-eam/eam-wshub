@@ -22,6 +22,7 @@ public class GasWorkOrder {
     private String edhDocumentNumber;
     private String SCEMCode;
     private String orderLine;
+    private String budgetCode;
     private BigDecimal SCEMCodeQuantity;
 
     public String getDescription() {
@@ -131,5 +132,13 @@ public class GasWorkOrder {
     @JsonProperty("SCEMCodeQuantity")
     public void setSCEMCodeQuantity(BigDecimal SCEMCodeQuantity) {
         this.SCEMCodeQuantity = SCEMCodeQuantity;
+    }
+
+    public String getBudgetCode() {
+        return budgetCode;
+    }
+
+    public void setBudgetCode(String budgetCode) {
+        this.budgetCode = budgetCode;
     }
 }

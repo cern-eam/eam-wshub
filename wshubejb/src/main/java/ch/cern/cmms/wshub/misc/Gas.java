@@ -48,6 +48,7 @@ public class Gas {
         workOrder.setRequestedEndDate(gasWorkOrder.getExpectedReturnDate());
         workOrder.setScheduledStartDate(gasWorkOrder.getExpectedDeliveryDate());
         workOrder.setScheduledEndDate(gasWorkOrder.getExpectedReturnDate());
+        workOrder.setCostCode(gasWorkOrder.getBudgetCode());
         workOrder.setComment(gasWorkOrder.getComment());
         workOrder.setClassCode(WO_CLASS);
         if (gasWorkOrder.getOrderLine() != null) {
