@@ -38,7 +38,13 @@ public class Gas {
         workOrder.setDescription(gasWorkOrder.getDescription());
         workOrder.setDepartmentCode(fetchDepartment(inforContext, gasWorkOrder.getSCEMCode(), gasWorkOrder.getSupplierRank()));
         workOrder.setTypeCode(WO_TYPE);
-        workOrder.setStatusCode(WO_STATUS);
+
+        if (isEmpty(gasWorkOrder.getWorkOrderStatus())) {
+            workOrder.setStatusCode(WO_STATUS);
+        } else {
+            workOrder.setStatusCode(gasWorkOrder.getWorkOrderStatus());
+        }
+
         workOrder.setEquipmentCode(gasWorkOrder.getGasEquipmentCode());
         workOrder.setLocationCode(gasWorkOrder.getGasPoint());
         workOrder.setStandardWO(WO_STDWO);

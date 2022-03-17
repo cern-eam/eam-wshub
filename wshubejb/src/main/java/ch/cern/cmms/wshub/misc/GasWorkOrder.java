@@ -16,6 +16,7 @@ public class GasWorkOrder {
     private String gasPoint;
     private String requestorCode;
     private String priority;
+    private String workOrderStatus;
     private Date expectedReturnDate;
     private Date expectedDeliveryDate;
     private String comment;
@@ -140,5 +141,13 @@ public class GasWorkOrder {
 
     public void setBudgetCode(String budgetCode) {
         this.budgetCode = budgetCode;
+    }
+
+    public String getWorkOrderStatus() {
+        return workOrderStatus;
+    }
+
+    public void setWorkOrderStatus(String workOrderStatus) {
+        this.workOrderStatus = workOrderStatus;
     }
 }
