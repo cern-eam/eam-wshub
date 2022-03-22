@@ -24,7 +24,7 @@ public class CompatibilityHandler implements SOAPHandler<SOAPMessageContext> {
 				context.getMessage().getSOAPPart().getEnvelope().addNamespaceDeclaration("SOAP-ENV", "http://schemas.xmlsoap.org/soap/envelope/");
 				context.getMessage().getSOAPPart().getEnvelope().getHeader().detachNode();
 			} catch (Exception e) {
-				System.out.println("Problem: " + e.getMessage());
+				// Code kept for backwards compatibility
 			}
 		} else {
 			// SCHEDULING DATES -> SCHEDULED DATES
@@ -38,7 +38,7 @@ public class CompatibilityHandler implements SOAPHandler<SOAPMessageContext> {
 					schedulingEndDateNode.getOwnerDocument().renameNode(schedulingEndDateNode, null, "scheduledEndDate");
 				}
 			} catch (Exception e) {
-				System.out.println("Problem: " + e.getMessage());
+				// Code kept for backwards compatibility
 			}
 		}
 
