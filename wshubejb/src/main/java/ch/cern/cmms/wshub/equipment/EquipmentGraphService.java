@@ -21,7 +21,7 @@ import ch.cern.cmms.wshub.equipment.entities.Node;
 import ch.cern.eam.wshub.core.tools.InforException;
 
 @ApplicationScoped
-public class EquipmentHierarchy {
+public class EquipmentGraphService {
 
 	@Inject
 	private InforClient inforClient;
@@ -32,7 +32,7 @@ public class EquipmentHierarchy {
 	public Graph readEquipmentGraph(EquipmentGraphRequest hierarchyrequest, Credentials credentials, String session)
 			throws InforException {
 		if (hierarchyrequest == null) {
-			throw inforClient.getTools().generateFault("Please supply the necessery information ");
+			throw inforClient.getTools().generateFault("Please supply the necessary information");
 		}
 
 		if (hierarchyrequest.getEquipmentCode() == null || hierarchyrequest.getEquipmentCode().trim().equals("")) {
@@ -49,39 +49,75 @@ public class EquipmentHierarchy {
 
 		hierarchyrequest.setLinkTypes("('" + hierarchyrequest.getLinkTypes().replace(",", "','") + "')");
 
-		String v_query = "select eqplinks.*, eqpchild.obj_desc  CHILDDESC,  eqpchild.obj_mrc as CHILDMRC, eqpchild.obj_obrtype as CHILDTYPE, eqpchild.obj_status as CHILDSTATUSC, ucodeschild.uco_desc as CHILDSTATUSD  from ( "
-				+ "select eqplinks.*, eqpparent.obj_desc PARENTDESC, eqpparent.obj_mrc as PARENTMRC, eqpparent.obj_obrtype as PARENTTYPE, eqpparent.obj_status as PARENTSTATUSC, ucodesparent.uco_desc as PARENTSTATUSD  from ( "
-				+ "select eqplinks.* from ("
-				+ "select level as hlevel, stc_parent as PARENTCODE, stc_child as CHILDCODE, 'STRUCTURE' as LINKTYPE, 'Installed In' as LINKDESC, 'BLACK' as LINKCOLOR "
-				+ "from r5structures where stc_parent_org = '*' and stc_child_org = '*' "
-				+ "start with stc_parent = ?  " + "connect by nocycle prior stc_child = stc_parent " + "union  "
-				+ "select -1 * level as hlevel, stc_parent as PARENTCODE, stc_child as CHILDCODE, 'STRUCTURE' as LINKTYPE, 'Installed In' as LINKDESC, 'BLACK' as LINKCOLOR  "
-				+ "from r5structures where stc_parent_org = '*' and stc_child_org = '*'  "
-				+ "start with stc_child = ?  " + "connect by nocycle prior stc_parent = stc_child  " + "union "
-				+ "select level as hlevel, eqp_srceqp AS PARENTCODE, eqp_maineqp AS CHILDCODE, EQP_DEPTYPE as LINKTYPE, EDT_DESC as LINKDESC, edt_color as LINKCOLOR  "
-				+ "from u5eqpdependency, u5eqpdepentypes " + "where eqp_deptype = edt_code "
-				+ "start with eqp_maineqp = ? " + "connect by nocycle prior eqp_srceqp = eqp_maineqp " + "union "
-				+ "select -1 * level as hlevel, eqp_srceqp AS PARENTCODE, eqp_maineqp AS CHILDCODE, EQP_DEPTYPE as LINKTYPE, EDT_DESC as LINKDESC, edt_color as LINKCOLOR  "
-				+ "from u5eqpdependency, u5eqpdepentypes " + "where eqp_deptype = edt_code "
-				+ "start with eqp_srceqp = ? " + "connect by nocycle prior eqp_maineqp = eqp_srceqp "
-				+ ") EQPLINKS WHERE EQPLINKS.linktype IN " + hierarchyrequest.getLinkTypes() + " AND ABS(HLEVEL) <= '"
-				+ hierarchyrequest.getMaxDepth() + "' AND ROWNUM <= 100"
-				+ ") eqplinks, r5objects eqpparent, r5ucodes ucodesparent where obj_code = eqplinks.parentcode and uco_entity = 'OBST' and uco_code = obj_status "
-				+ ") eqplinks, r5objects eqpchild, r5ucodes ucodeschild where obj_code = eqplinks.childcode and uco_entity = 'OBST' and uco_code = obj_status";
+		String v_query = "with connections as (" +
+				"    select " +
+				"        'STRUCTURE' as LINKTYPE," +
+				"        stc_parent as PARENTCODE, " +
+				"        stc_child as CHILDCODE, " +
+				"        'Installed In' as LINKDESC, " +
+				"        'BLACK' as LINKCOLOR," +
+				"        p.obj_desc as PARENTDESC," +
+				"        p.obj_mrc as PARENTMRC," +
+				"        p.obj_obtype as PARENTTYPE," +
+				"        p.obj_status as PARENTSTATUSC," +
+				"        (SELECT UCO_DESC FROM R5UCODES WHERE UCO_ENTITY = 'OBST' AND UCO_CODE = p.OBJ_STATUS) as PARENTSTATUSD," +
+				"        c.obj_desc as CHILDDESC," +
+				"        c.obj_mrc as CHILDMRC," +
+				"        c.obj_obtype as CHILDTYPE," +
+				"        c.obj_status as CHILDSTATUSC," +
+				"        (SELECT UCO_DESC FROM R5UCODES WHERE UCO_ENTITY = 'OBST' AND UCO_CODE = c.OBJ_STATUS) as CHILDSTATUSD" +
+				"    from r5structures" +
+				"        inner join r5objects c on stc_child = c.obj_code" +
+				"        inner join r5objects p on stc_parent = p.obj_code" +
+				"    UNION" +
+				"    select " +
+				"        EQP_DEPTYPE as LINKTYPE, " +
+				"        eqp_srceqp as PARENTCODE, " +
+				"        eqp_maineqp as CHILDCODE, " +
+				"        edt_desc as LINKDESC, " +
+				"        edt_color as LINKCOLOR," +
+				"        p.obj_desc as PARENTDESC," +
+				"        p.obj_mrc as PARENTMRC," +
+				"        p.obj_obtype as PARENTTYPE," +
+				"        p.obj_status as PARENTSTATUSC," +
+				"        (SELECT UCO_DESC FROM R5UCODES WHERE UCO_ENTITY = 'OBST' AND UCO_CODE = p.OBJ_STATUS) as PARENTSTATUSD," +
+				"        c.obj_desc as CHILDDESC," +
+				"        c.obj_mrc as CHILDMRC," +
+				"        c.obj_obtype as CHILDTYPE," +
+				"        c.obj_status as CHILDSTATUSC," +
+				"        (SELECT UCO_DESC FROM R5UCODES WHERE UCO_ENTITY = 'OBST' AND UCO_CODE = c.OBJ_STATUS) as CHILDSTATUSD" +
+				"    from u5eqpdependency " +
+				"        inner join u5eqpdepentypes on eqp_deptype = edt_code" +
+				"        inner join r5objects c on eqp_maineqp = c.obj_code" +
+				"        inner join r5objects p on eqp_srceqp = p.obj_code" +
+				"    ) " +
+				"select * from (" +
+				"    (" +
+				"    select level as HLEVEL, LINKTYPE, PARENTCODE, CHILDCODE, LINKDESC, LINKCOLOR, PARENTDESC, PARENTMRC, PARENTTYPE, PARENTSTATUSC, PARENTSTATUSD, CHILDDESC, CHILDMRC, CHILDTYPE, CHILDSTATUSC, CHILDSTATUSD " +
+				"    from connections" +
+				"    start with CHILDCODE = ?" +
+				"    connect by nocycle prior CHILDCODE = PARENTCODE" +
+				"    )" +
+				"    UNION" +
+				"    (" +
+				"    select -1 * level as HLEVEL, LINKTYPE, PARENTCODE, CHILDCODE, LINKDESC, LINKCOLOR, PARENTDESC, PARENTMRC, PARENTTYPE, PARENTSTATUSC, PARENTSTATUSD, CHILDDESC, CHILDMRC, CHILDTYPE, CHILDSTATUSC, CHILDSTATUSD " +
+				"    from connections" +
+				"    start with CHILDCODE = ?" +
+				"    connect by nocycle prior PARENTCODE = CHILDCODE" +
+				"    )" +
+				")" +
+				" WHERE LINKTYPE IN " + hierarchyrequest.getLinkTypes() + " AND ABS(HLEVEL) <= '" + hierarchyrequest.getMaxDepth() + "' AND ROWNUM <= 300";
 
-		LinkedHashMap<String, Node> nodes = new LinkedHashMap<String, Node>();
-		LinkedList<Edge> edges = new LinkedList<Edge>();
+		LinkedHashMap<String, Node> nodes = new LinkedHashMap<>();
+		LinkedList<Edge> edges = new LinkedList<>();
 
-		PreparedStatement stmt = null;
+		PreparedStatement stmt;
 		Connection v_connection = null;
 		try {
 			v_connection = inforClient.getTools().getDataSource().getConnection();
-
 			stmt = v_connection.prepareStatement(v_query);
 			stmt.setString(1, hierarchyrequest.getEquipmentCode().toUpperCase().trim());
 			stmt.setString(2, hierarchyrequest.getEquipmentCode().toUpperCase().trim());
-			stmt.setString(3, hierarchyrequest.getEquipmentCode().toUpperCase().trim());
-			stmt.setString(4, hierarchyrequest.getEquipmentCode().toUpperCase().trim());
 
 			ResultSet rs = stmt.executeQuery();
 
@@ -117,9 +153,9 @@ public class EquipmentHierarchy {
 		}
 
 		//
-		LinkedList<String> startNodes = new LinkedList<String>();
+		LinkedList<String> startNodes = new LinkedList<>();
 		startNodes.add(hierarchyrequest.getEquipmentCode().toUpperCase());
-		LinkedList<String> finalNodes = new LinkedList<String>();
+		LinkedList<String> finalNodes = new LinkedList<>();
 		finalNodes.add(hierarchyrequest.getEquipmentCode().toUpperCase());
 
 		reachableNodes(startNodes, finalNodes, edges);
@@ -147,7 +183,7 @@ public class EquipmentHierarchy {
 	}
 
 	private void reachableNodes(LinkedList<String> startNodes, LinkedList<String> finalNodes, LinkedList<Edge> edges) {
-		LinkedList<String> newStartNodes = new LinkedList<String>();
+		LinkedList<String> newStartNodes = new LinkedList<>();
 
 		for (Edge edge : edges) {
 			for (String nodeID : startNodes) {
@@ -173,24 +209,44 @@ public class EquipmentHierarchy {
 
 		int maxDepth = 0;
 
-		String v_query = "select * from ("
-				+ "select level as hlevel, stc_parent as PARENTCODE, stc_child as CHILDCODE, 'STRUCTURE' as LINKTYPE, 'Installed In' as LINKDESC, 'BLACK' as LINKCOLOR "
-				+ "from r5structures where stc_parent_org = '*' and stc_child_org = '*' "
-				+ "start with stc_parent = ?  " + "connect by nocycle prior stc_child = stc_parent " + "union  "
-				+ "select -1 * level as hlevel, stc_parent as PARENTCODE, stc_child as CHILDCODE, 'STRUCTURE' as LINKTYPE, 'Installed In' as LINKDESC, 'BLACK' as LINKCOLOR  "
-				+ "from r5structures where stc_parent_org = '*' and stc_child_org = '*'  "
-				+ "start with stc_child = ?  " + "connect by nocycle prior stc_parent = stc_child  " + "union "
-				+ "select level as hlevel, eqp_maineqp AS PARENTCODE, eqp_srceqp AS CHILDCODE, EQP_DEPTYPE as LINKTYPE, EDT_DESC as LINKDESC, edt_color as LINKCOLOR  "
-				+ "from u5eqpdependency, u5eqpdepentypes " + "where eqp_deptype = edt_code "
-				+ "start with eqp_maineqp = ? " + "connect by nocycle prior eqp_srceqp = eqp_maineqp " + "union "
-				+ "select level as hlevel, eqp_maineqp AS PARENTCODE, eqp_srceqp AS CHILDCODE, EQP_DEPTYPE as LINKTYPE, EDT_DESC as LINKDESC, edt_color as LINKCOLOR  "
-				+ "from u5eqpdependency, u5eqpdepentypes " + "where eqp_deptype = edt_code "
-				+ "start with eqp_srceqp = ? "
-				+ "connect by nocycle prior eqp_maineqp = eqp_srceqp ) where ROWNUM <= 100";
+		String v_query = "with connections as ( " +
+				"    select  " +
+				"        'STRUCTURE' as LINKTYPE, " +
+				"        stc_parent as PARENTCODE,  " +
+				"        stc_child as CHILDCODE,  " +
+				"        'Installed In' as LINKDESC,  " +
+				"        'BLACK' as LINKCOLOR " +
+				"    from r5structures " +
+				"    UNION " +
+				"    select  " +
+				"        EQP_DEPTYPE as LINKTYPE,  " +
+				"        eqp_srceqp as PARENTCODE,  " +
+				"        eqp_maineqp as CHILDCODE,  " +
+				"        edt_desc as LINKDESC,  " +
+				"        edt_color as LINKCOLOR " +
+				"    from u5eqpdependency  " +
+				"        inner join u5eqpdepentypes on eqp_deptype = edt_code " +
+				"    ) " +
+				"select * from ( " +
+				"    ( " +
+				"    select level as HLEVEL, LINKTYPE, PARENTCODE, CHILDCODE, LINKDESC, LINKCOLOR " +
+				"    from connections " +
+				"    start with CHILDCODE = ? " +
+				"    connect by nocycle prior CHILDCODE = PARENTCODE " +
+				"    ) " +
+				"    UNION " +
+				"    ( " +
+				"    select -1 * level as HLEVEL, LINKTYPE, PARENTCODE, CHILDCODE, LINKDESC, LINKCOLOR " +
+				"    from connections " +
+				"    start with CHILDCODE = ? " +
+				"    connect by nocycle prior PARENTCODE = CHILDCODE " +
+				"    ) " +
+				") " +
+				"WHERE ROWNUM <= 300";
 
-		LinkedHashMap<String, GraphLinkType> links = new LinkedHashMap<String, GraphLinkType>();
+		LinkedHashMap<String, GraphLinkType> links = new LinkedHashMap<>();
 
-		PreparedStatement stmt = null;
+		PreparedStatement stmt;
 		Connection v_connection = null;
 		try {
 			v_connection = inforClient.getTools().getDataSource().getConnection();
@@ -198,8 +254,6 @@ public class EquipmentHierarchy {
 			stmt = v_connection.prepareStatement(v_query);
 			stmt.setString(1, parent.toUpperCase().trim());
 			stmt.setString(2, parent.toUpperCase().trim());
-			stmt.setString(3, parent.toUpperCase().trim());
-			stmt.setString(4, parent.toUpperCase().trim());
 
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -209,7 +263,7 @@ public class EquipmentHierarchy {
 				}
 				String linkType = rs.getString("LINKTYPE");
 				if (!links.containsKey(rs.getString("LINKTYPE"))) {
-					GraphLinkType link = new GraphLinkType(linkType, rs.getString("LINKDESC"));
+					GraphLinkType link = new GraphLinkType(linkType, rs.getString("LINKDESC"), rs.getString("LINKCOLOR"));
 					links.put(linkType, link);
 				}
 			}
@@ -228,8 +282,7 @@ public class EquipmentHierarchy {
 		graph.maxDepth = maxDepth;
 	}
 
-	public String screen(String user, String function) throws SQLException {
-
+	public String getScreen(String user, String function) throws SQLException {
 		if (user == null || user.trim().equals("") || function == null || function.trim().equals("")) {
 			return null;
 		}
@@ -241,7 +294,8 @@ public class EquipmentHierarchy {
 				+ "AND COALESCE(EMN_MOBILE,'-')='-' AND COALESCE(EMN_HIDE,'-')='-' " + "AND (EMN_FUNCTION = '"
 				+ function.toUpperCase() + "' OR FUN_APPLICATION = '" + function.toUpperCase()
 				+ "') ORDER BY FUN_APPLICATION DESC";
-		Statement stmt = null;
+
+		Statement stmt;
 		Connection v_connection = null;
 		try {
 			v_connection = inforClient.getTools().getDataSource().getConnection();
