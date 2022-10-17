@@ -49,15 +49,16 @@ public class Equipment extends WSHubController {
     @ApiOperation("Read Equipment")
     @ApiInforAuthentication
     @ApiInforResponse
-    public Response readEquipment(@PathParam("code") String code) {
+    public Response readEquipment(@PathParam("code") String code, @QueryParam("code") String codeQuery) {
         try {
-            return ok(inforClient.getEquipmentFacadeService().readEquipment(authentication.getInforContext(), code));
+            return ok(inforClient.getEquipmentFacadeService().readEquipment(authentication.getInforContext(), codeQuery != null ? codeQuery : code));
         } catch (InforException e) {
             return badRequest(e);
         } catch(Exception e) {
             return serverError(e);
         }
     }
+
 
     @PUT
     @Path("/{code}")
@@ -85,8 +86,7 @@ public class Equipment extends WSHubController {
     @ApiInforResponse
     public Response deleteEquipment(@PathParam("code") String code) {
         try {
-            inforClient.getEquipmentFacadeService().deleteEquipment(authentication.getInforContext(), code);
-            return noConent();
+            return ok(inforClient.getEquipmentFacadeService().deleteEquipment(authentication.getInforContext(), code));
         } catch (InforException e) {
             return badRequest(e);
         } catch(Exception e) {
@@ -198,4 +198,22 @@ public class Equipment extends WSHubController {
             return serverError(e);
         }
     }
+
+    @PUT
+    @Path("/code/")
+    @Produces("application/json")
+    @Consumes("application/json")
+    @ApiOperation("Update Equipment Code")
+    @ApiInforAuthentication
+    @ApiInforResponse
+    public Response updateEquipmentCode(@QueryParam("currentCode") String currentCode, @QueryParam("newCode")  String newCode, @QueryParam("equipmentType") String equipmentType) {
+        try {
+            return ok(inforClient.getEquipmentOtherService().updateEquipmentCode(authentication.getInforContext(), currentCode, newCode, equipmentType));
+        } catch (InforException e) {
+            return badRequest(e);
+        } catch(Exception e) {
+            return serverError(e);
+        }
+    }
+
 }

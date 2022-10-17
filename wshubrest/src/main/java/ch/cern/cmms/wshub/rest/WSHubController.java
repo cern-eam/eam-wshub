@@ -24,7 +24,7 @@ public class WSHubController {
      * @param <T>
      * @return
      */
-    public <T> Response noConent() {
+    public <T> Response noContent() {
         return Response
                 .status(Response.Status.NO_CONTENT)
                 .build();

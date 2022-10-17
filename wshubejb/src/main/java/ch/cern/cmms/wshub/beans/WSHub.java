@@ -8,6 +8,7 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 
 import ch.cern.cmms.wshub.misc.GasWorkOrder;
+import ch.cern.eam.wshub.core.client.InforContext;
 import ch.cern.eam.wshub.core.services.administration.entities.EAMUser;
 import ch.cern.eam.wshub.core.services.administration.entities.MenuSpecification;
 import ch.cern.eam.wshub.core.services.comments.entities.Comment;
@@ -287,6 +288,12 @@ public interface WSHub {
 	public String deleteEquipment(@WebParam(name = "equipmentCode") String equipmentCode,
 			@WebParam(name = "credentials") Credentials credentials, @WebParam(name = "sessionID") String sessionID)
 			throws InforException;
+
+	String updateEquipmentCode(@WebParam(name = "currentCode") String equipmentCode,
+							   @WebParam(name = "newCode") String equipmentNewCode,
+							   @WebParam(name = "equipmentType") String equipmentType,
+							   @WebParam(name = "credentials") Credentials credentials, @WebParam(name = "sessionID") String sessionID) throws InforException;
+
 
 	@WebResult(name = "equipmentCode")
 	public BatchResponse<String> createEquipmentBatch(@WebParam(name = "equipment") List<Equipment> workorder,

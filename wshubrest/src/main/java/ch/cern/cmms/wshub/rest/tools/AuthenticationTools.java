@@ -25,6 +25,7 @@ public class AuthenticationTools {
         String organization = request.getHeader("INFOR_ORGANIZATION");
         String sessionid = request.getHeader("INFOR_SESSIONID");
         String tenant = request.getHeader("INFOR_TENANT");
+        String authorization = request.getHeader("Authorization");
 
         InforContext inforContext = new InforContext();
 
@@ -39,8 +40,11 @@ public class AuthenticationTools {
             inforContext.setCredentials(credentials);
         } else if (notEmpty(sessionid)) {
             inforContext.setSessionID(sessionid);
-        } else {
-            throw inforClient.getTools().generateFault("Credentials or Session ID is required.");
+        } else if (notEmpty(authorization) ) {
+            inforContext.setSessionID(authorization);
+        }
+        else {
+            throw inforClient.getTools().generateFault("Credentials, Session ID or an OIDC token is required.");
         }
 
         return inforContext;

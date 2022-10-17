@@ -83,8 +83,7 @@ public class PartController extends WSHubController {
     @ApiInforResponse
     public Response deletePart(@PathParam("code") String code) {
         try {
-            inforClient.getPartService().deletePart(authentication.getInforContext(), code);
-            return noConent();
+            return ok(inforClient.getPartService().deletePart(authentication.getInforContext(), code));
         } catch (InforException e) {
             return badRequest(e);
         } catch(Exception e) {

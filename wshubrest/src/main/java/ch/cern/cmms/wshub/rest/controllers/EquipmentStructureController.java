@@ -37,8 +37,7 @@ public class EquipmentStructureController extends WSHubController {
     @ApiInforResponse
     public Response addEquipmentToStructure(EquipmentStructure equipmentStructure) {
         try {
-            inforClient.getEquipmentStructureService().addEquipmentToStructure(authentication.getInforContext(), equipmentStructure);
-            return noConent();
+            return ok(inforClient.getEquipmentStructureService().addEquipmentToStructure(authentication.getInforContext(), equipmentStructure));
         } catch (InforException e) {
             return badRequest(e);
         } catch(Exception e) {

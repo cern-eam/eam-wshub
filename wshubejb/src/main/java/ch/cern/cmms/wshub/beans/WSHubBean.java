@@ -50,6 +50,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.ExcludeClassInterceptors;
 import javax.jws.HandlerChain;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 
@@ -289,6 +290,10 @@ public class WSHubBean implements WSHub {
 
 	public String deleteEquipment(String equipmentCode, Credentials credentials, String sessionID) throws InforException {
 		return inforClient.getEquipmentFacadeService().deleteEquipment(inforClient.getTools().getInforContext(credentials, sessionID), equipmentCode);
+	}
+
+	public String updateEquipmentCode(String currentCode, String newCode, String equipmentType, Credentials credentials, String sessionID) throws InforException {
+		return inforClient.getEquipmentOtherService().updateEquipmentCode(inforClient.getTools().getInforContext(credentials, sessionID), currentCode, newCode, equipmentType);
 	}
 
 	public BatchResponse<String> createEquipmentBatch(List<Equipment> equipmentList, Credentials credentials, String sessionID) throws InforException {

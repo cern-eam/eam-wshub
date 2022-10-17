@@ -96,8 +96,7 @@ public class WorkOrderController extends WSHubController {
     @ApiInforResponse
     public Response deleteWorkOrder(@PathParam("number") String number) {
         try {
-            inforClient.getWorkOrderService().deleteWorkOrder(authentication.getInforContext(), number);
-            return noConent();
+            return ok(inforClient.getWorkOrderService().deleteWorkOrder(authentication.getInforContext(), number));
         } catch (InforException e) {
             return badRequest(e);
         } catch(Exception e) {
