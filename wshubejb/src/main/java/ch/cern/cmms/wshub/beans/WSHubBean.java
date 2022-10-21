@@ -1,7 +1,7 @@
 package ch.cern.cmms.wshub.beans;
 
 import ch.cern.cmms.wshub.entities.AsyncExecution;
-import ch.cern.cmms.wshub.equipment.EquipmentHierarchy;
+import ch.cern.cmms.wshub.equipment.EquipmentGraphService;
 import ch.cern.cmms.wshub.equipment.entities.EquipmentGraphRequest;
 import ch.cern.cmms.wshub.equipment.entities.Graph;
 import ch.cern.cmms.wshub.misc.Gas;
@@ -61,7 +61,7 @@ import javax.jws.WebService;
 public class WSHubBean implements WSHub {
 
 	@Inject
-	private EquipmentHierarchy equipmentHierarchy;
+	private EquipmentGraphService equipmentGraphService;
 	@Inject
 	private EquipmentDependencies userDefinedScreens;
 	@Inject
@@ -391,7 +391,7 @@ public class WSHubBean implements WSHub {
 
 	public Graph readEquipmentGraph(EquipmentGraphRequest graph, Credentials credentials, String sessionID)
 			throws InforException {
-		return equipmentHierarchy.readEquipmentGraph(graph, credentials, sessionID);
+		return equipmentGraphService.readEquipmentGraph(graph, credentials, sessionID);
 	}
 
 	public String createEquipmentCampaign(EquipmentCampaign equipmentCampaign, Credentials credentials, String sessionID) throws InforException {
