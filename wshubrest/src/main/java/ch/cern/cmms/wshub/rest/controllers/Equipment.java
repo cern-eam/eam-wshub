@@ -49,9 +49,9 @@ public class Equipment extends WSHubController {
     @ApiOperation("Read Equipment")
     @ApiInforAuthentication
     @ApiInforResponse
-    public Response readEquipment(@PathParam("code") String code, @QueryParam("code") String codeQuery) {
+    public Response readEquipment(@PathParam("code") String code) {
         try {
-            return ok(inforClient.getEquipmentFacadeService().readEquipment(authentication.getInforContext(), codeQuery != null ? codeQuery : code));
+            return ok(inforClient.getEquipmentFacadeService().readEquipment(authentication.getInforContext(), decodeSlash(code)));
         } catch (InforException e) {
             return badRequest(e);
         } catch(Exception e) {
@@ -69,7 +69,7 @@ public class Equipment extends WSHubController {
     @ApiInforResponse
     public Response updateEquipment(@PathParam("code") String code, ch.cern.eam.wshub.core.services.equipment.entities.Equipment equipment) {
         try {
-            equipment.setCode(code);
+            equipment.setCode(decodeSlash(code));
             return ok(inforClient.getEquipmentFacadeService().updateEquipment(authentication.getInforContext(), equipment));
         } catch (InforException e) {
             return badRequest(e);
@@ -86,7 +86,7 @@ public class Equipment extends WSHubController {
     @ApiInforResponse
     public Response deleteEquipment(@PathParam("code") String code) {
         try {
-            return ok(inforClient.getEquipmentFacadeService().deleteEquipment(authentication.getInforContext(), code));
+            return ok(inforClient.getEquipmentFacadeService().deleteEquipment(authentication.getInforContext(), decodeSlash(code)));
         } catch (InforException e) {
             return badRequest(e);
         } catch(Exception e) {
@@ -214,6 +214,13 @@ public class Equipment extends WSHubController {
         } catch(Exception e) {
             return serverError(e);
         }
+    }
+
+    public static String decodeSlash(String code) {
+        if (code == null) {
+            return null;
+        }
+        return code.replace("%2F", "/");
     }
 
 }
