@@ -25,12 +25,17 @@ public class AuthenticationTools {
         String organization = request.getHeader("INFOR_ORGANIZATION");
         String sessionid = request.getHeader("INFOR_SESSIONID");
         String tenant = request.getHeader("INFOR_TENANT");
+        String localizeResults = request.getHeader("INFOR_LOCALIZE_RESULTS");
         String authorization = request.getHeader("Authorization");
 
         InforContext inforContext = new InforContext();
 
         inforContext.setOrganizationCode(organization);
         inforContext.setTenant(tenant);
+
+        if (notEmpty(localizeResults)) {
+            inforContext.setLocalizeResults("true".equalsIgnoreCase(localizeResults));
+        }
 
         // Credentials, Session ID
         if (notEmpty(user) && notEmpty(password)) {
