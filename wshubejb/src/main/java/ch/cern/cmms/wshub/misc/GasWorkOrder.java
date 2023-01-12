@@ -26,6 +26,8 @@ public class GasWorkOrder {
     private String budgetCode;
     private BigDecimal SCEMCodeQuantity;
 
+    private BigDecimal targetValue;
+
     public String getDescription() {
         return description;
     }
@@ -149,5 +151,14 @@ public class GasWorkOrder {
 
     public void setWorkOrderStatus(String workOrderStatus) {
         this.workOrderStatus = workOrderStatus;
+    }
+
+    @XmlJavaTypeAdapter(BigDecimalAdapter.class)
+    public BigDecimal getTargetValue() {
+        return targetValue;
+    }
+
+    public void setTargetValue(BigDecimal targetValue) {
+        this.targetValue = targetValue;
     }
 }

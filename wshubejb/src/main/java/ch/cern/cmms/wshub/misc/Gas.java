@@ -66,6 +66,7 @@ public class Gas {
         workOrder.setUserDefinedFields(new UserDefinedFields());
         workOrder.getUserDefinedFields().setUdfchar20(gasWorkOrder.getEdhDocumentNumber());
         workOrder.getUserDefinedFields().setUdfchar40(gasWorkOrder.getSCEMCode());
+        workOrder.setTargetValue(gasWorkOrder.getTargetValue());
 
         String workOrderNumber = inforClient.getWorkOrderService().createWorkOrder(inforContext, workOrder);
 
