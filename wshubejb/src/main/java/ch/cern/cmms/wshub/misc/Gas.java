@@ -51,7 +51,7 @@ public class Gas {
         workOrder.setReportedBy(gasWorkOrder.getRequestorCode());
         workOrder.setPriorityCode(gasWorkOrder.getPriority());
         workOrder.setReportedDate(new Date());
-        workOrder.setRequestedEndDate(gasWorkOrder.getExpectedReturnDate());
+        workOrder.setRequestedEndDate(gasWorkOrder.getExpectedDeliveryDate());
         workOrder.setScheduledStartDate(gasWorkOrder.getExpectedDeliveryDate());
         workOrder.setScheduledEndDate(gasWorkOrder.getExpectedReturnDate());
         workOrder.setCostCode(gasWorkOrder.getBudgetCode());

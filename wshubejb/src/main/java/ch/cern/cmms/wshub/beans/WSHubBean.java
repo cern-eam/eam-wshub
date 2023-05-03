@@ -654,6 +654,10 @@ public class WSHubBean implements WSHub {
 		);
 	}
 
+	public String updateUserDefinedTableRows(UDTOpBean udtOpBean, Credentials credentials, String sessionID) throws InforException {
+		return inforClient.getUserDefinedScreenService().updateUserDefinedScreenRow(inforClient.getTools().getInforContext(credentials, sessionID), udtOpBean.getTableName(), udtOpBean.getRow(), udtOpBean.getWhereFilters());
+	}
+
 	//
 	// GAS
 	//

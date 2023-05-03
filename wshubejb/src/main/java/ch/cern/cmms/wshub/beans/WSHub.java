@@ -655,6 +655,13 @@ public interface WSHub {
 				@WebParam(name = "sessionID") String sessionID
 		) throws InforException;
 
+	@WebResult(name = "result")
+	String updateUserDefinedTableRows(
+			@WebParam(name = "udtOpBean") UDTOpBean udtOpBean,
+			@WebParam(name = "credentials") Credentials credentials,
+			@WebParam(name = "sessionID") String sessionID
+	) throws InforException;
+
 	//
 	// GAS
 	//
