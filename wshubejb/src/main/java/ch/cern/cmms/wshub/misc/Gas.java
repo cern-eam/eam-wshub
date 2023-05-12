@@ -70,6 +70,17 @@ public class Gas {
 
         String workOrderNumber = inforClient.getWorkOrderService().createWorkOrder(inforContext, workOrder);
 
+        try {
+            addWorkOrderPart(inforContext, workOrderNumber, gasWorkOrder);
+        } catch (Exception exception) {
+            // Try for the second time if it has failed
+            addWorkOrderPart(inforContext, workOrderNumber, gasWorkOrder);
+        }
+
+        return workOrderNumber;
+    }
+
+    private void addWorkOrderPart(InforContext inforContext, String workOrderNumber, GasWorkOrder gasWorkOrder) throws InforException {
         WorkOrderPart workOrderPart = new WorkOrderPart();
         workOrderPart.setPartCode(gasWorkOrder.getSCEMCode());
         workOrderPart.setPlannedQty(gasWorkOrder.getSCEMCodeQuantity());
@@ -77,8 +88,6 @@ public class Gas {
         workOrderPart.setActivityCode("5");
         workOrderPart.setPlannedSource("false");
         inforClient.getWorkOrderMiscService().addWorkOrderPart(inforContext, workOrderPart);
-
-        return workOrderNumber;
     }
 
 
