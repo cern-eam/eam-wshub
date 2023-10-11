@@ -16,14 +16,14 @@ public class Misc {
     private InforClient inforClient;
 
     public String hideEquipment(InforContext inforContext, String equipmentCode) throws InforException {
-        Equipment equipment = new Equipment();
-        equipment.setCode(equipmentCode);
-        equipment.setOutOfService(true);
-        equipment.setDepartmentCode("*INA");
-        inforClient.getEquipmentFacadeService().updateEquipment(inforContext, equipment);
         Random random = new Random();
         String newEquipmentCode = "HIDDEN_" + (random.nextInt(9000000) + 1000000);
         inforClient.getEquipmentOtherService().updateEquipmentCode(inforContext, equipmentCode, newEquipmentCode, null);
+        Equipment equipment = new Equipment();
+        equipment.setCode(newEquipmentCode);
+        equipment.setOutOfService(true);
+        equipment.setDepartmentCode("*INA");
+        inforClient.getEquipmentFacadeService().updateEquipment(inforContext, equipment);
         return newEquipmentCode;
     }
 
