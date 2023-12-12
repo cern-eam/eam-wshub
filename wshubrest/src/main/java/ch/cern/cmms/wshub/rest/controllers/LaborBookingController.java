@@ -9,6 +9,7 @@ import ch.cern.eam.wshub.core.services.workorders.entities.LaborBooking;
 import ch.cern.eam.wshub.core.tools.InforException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -27,7 +28,7 @@ public class LaborBookingController extends WSHubController {
     @GET
     @Path("/{number}")
     @Produces("application/json")
-    @ApiOperation("Read Work Order Labor")
+    @ApiOperation(value = "Read Work Order Labor", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readWorkOrderLaborBooking(@PathParam("number") String workOrderNumber) {
@@ -43,7 +44,7 @@ public class LaborBookingController extends WSHubController {
     @POST
     @Path("/{number}")
     @Produces("application/json")
-    @ApiOperation("Book Work Order Labor")
+    @ApiOperation(value = "Book Work Order Labor", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createWorkOrderLaborBooking(@PathParam("number") String workOrderNumber, LaborBooking laborBooking) {

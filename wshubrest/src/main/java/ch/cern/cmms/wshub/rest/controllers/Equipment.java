@@ -30,7 +30,7 @@ public class Equipment extends WSHubController {
     @Path("/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Create Equipment")
+    @ApiOperation(value = "Create Equipment", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createEquipment(ch.cern.eam.wshub.core.services.equipment.entities.Equipment equipment) {
@@ -46,7 +46,7 @@ public class Equipment extends WSHubController {
     @GET
     @Path("/{code}")
     @Produces("application/json")
-    @ApiOperation("Read Equipment")
+    @ApiOperation(value = "Read Equipment", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readEquipment(@PathParam("code") String code) {
@@ -64,7 +64,7 @@ public class Equipment extends WSHubController {
     @Path("/{code}")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Update Equipment")
+    @ApiOperation(value = "Update Equipment", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateEquipment(@PathParam("code") String code, ch.cern.eam.wshub.core.services.equipment.entities.Equipment equipment) {
@@ -81,7 +81,7 @@ public class Equipment extends WSHubController {
     @DELETE
     @Path("/{code}")
     @Produces("application/json")
-    @ApiOperation("Delete Equipment")
+    @ApiOperation(value = "Delete Equipment", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response deleteEquipment(@PathParam("code") String code) {
@@ -102,7 +102,7 @@ public class Equipment extends WSHubController {
     @Path("/list/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Create Multiple Equipment")
+    @ApiOperation(value = "Create Multiple Equipment", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createEquipmentList(List<ch.cern.eam.wshub.core.services.equipment.entities.Equipment> equipment) {
@@ -118,7 +118,7 @@ public class Equipment extends WSHubController {
     @GET
     @Path("/list/{equipmentcodes}")
     @Produces("application/json")
-    @ApiOperation("Read Multiple Equipment")
+    @ApiOperation(value = "Read Multiple Equipment", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readEquipmentList(@PathParam("equipmentcodes") String equipmentCodes) {
@@ -135,7 +135,7 @@ public class Equipment extends WSHubController {
     @Path("/list/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Update Multiple Equipment")
+    @ApiOperation(value = "Update Multiple Equipment", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateEquipmentList(List<ch.cern.eam.wshub.core.services.equipment.entities.Equipment> equipment) {
@@ -152,7 +152,7 @@ public class Equipment extends WSHubController {
     @Path("/list/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Delete Multiple Equipment")
+    @ApiOperation(value = "Delete Multiple Equipment", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response deleteEquipmentList(List<String> equipmentCodes) {
@@ -169,7 +169,7 @@ public class Equipment extends WSHubController {
     @Path("/warrantycoverage/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Create Equipment Warranty Coverage")
+    @ApiOperation(value = "Create Equipment Warranty Coverage", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createEquipmentWarrantyCoverage(EquipmentWarranty equipmentWarranty) {
@@ -186,7 +186,7 @@ public class Equipment extends WSHubController {
     @Path("/warrantycoverage/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Update Equipment Warranty Coverage")
+    @ApiOperation(value = "Update Equipment Warranty Coverage", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateEquipmentWarrantyCoverage(EquipmentWarranty equipmentWarranty) {
@@ -203,7 +203,7 @@ public class Equipment extends WSHubController {
     @Path("/code/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Update Equipment Code")
+    @ApiOperation(value = "Update Equipment Code", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateEquipmentCode(@QueryParam("currentCode") String currentCode, @QueryParam("newCode")  String newCode, @QueryParam("equipmentType") String equipmentType) {

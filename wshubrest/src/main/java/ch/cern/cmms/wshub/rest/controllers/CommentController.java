@@ -9,6 +9,7 @@ import ch.cern.eam.wshub.core.services.comments.entities.Comment;
 import ch.cern.eam.wshub.core.tools.InforException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -28,7 +29,7 @@ public class CommentController extends WSHubController {
     @Path("/{entityCode}/{entityKeyCode}")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Create Comment")
+    @ApiOperation(value = "Create Comment", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createComment(@PathParam("entityCode") String entityCode,
@@ -47,7 +48,7 @@ public class CommentController extends WSHubController {
     @GET
     @Path("/{entityCode}/{entityKeyCode}")
     @Produces("application/json")
-    @ApiOperation("Read Comments")
+    @ApiOperation(value = "Read Comments", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readComments(@PathParam("entityCode") String entityCode,
@@ -65,7 +66,7 @@ public class CommentController extends WSHubController {
     @Path("/{entityCode}/{entityKeyCode}")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Update Comment")
+    @ApiOperation(value = "Update Comment", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateComment(@PathParam("entityCode") String entityCode,

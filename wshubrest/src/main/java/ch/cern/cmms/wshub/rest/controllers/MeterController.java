@@ -9,6 +9,7 @@ import ch.cern.eam.wshub.core.services.workorders.entities.MeterReading;
 import ch.cern.eam.wshub.core.tools.InforException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -31,7 +32,7 @@ public class MeterController extends WSHubController {
     @Path("/reading")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Create Meter Reading")
+    @ApiOperation(value = "Create Meter Reading", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createMeterReading(MeterReading meterReading) {

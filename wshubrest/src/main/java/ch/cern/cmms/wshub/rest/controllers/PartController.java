@@ -9,6 +9,7 @@ import ch.cern.eam.wshub.core.services.material.entities.Part;
 import ch.cern.eam.wshub.core.tools.InforException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -27,7 +28,7 @@ public class PartController extends WSHubController {
     @GET
     @Path("/{number}")
     @Produces("application/json")
-    @ApiOperation("Read Part")
+    @ApiOperation(value = "Read Part", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readPart(@PathParam("number") String code) {
@@ -44,7 +45,7 @@ public class PartController extends WSHubController {
     @Path("/{code}")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Update Part")
+    @ApiOperation(value = "Update Part", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updatePart(@PathParam("code") String code, Part part) {
@@ -62,7 +63,7 @@ public class PartController extends WSHubController {
     @Path("/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Create Part")
+    @ApiOperation(value = "Create Part", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createPart(Part part) {
@@ -78,7 +79,7 @@ public class PartController extends WSHubController {
     @DELETE
     @Path("/{code}")
     @Produces("application/json")
-    @ApiOperation("Delete Part")
+    @ApiOperation(value = "Delete Part", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response deletePart(@PathParam("code") String code) {

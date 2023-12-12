@@ -9,6 +9,7 @@ import ch.cern.eam.wshub.core.services.material.entities.Bin;
 import ch.cern.eam.wshub.core.tools.InforException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -28,7 +29,7 @@ public class StoreBinController extends WSHubController {
     @Path("/create")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Create Store Bin")
+    @ApiOperation(value = "Create Store Bin", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createStoreBin(Bin bin)  {
@@ -45,7 +46,7 @@ public class StoreBinController extends WSHubController {
     @Path("/read")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Read Store Bin")
+    @ApiOperation(value = "Read Store Bin", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readStoreBin(Bin bin)  {
@@ -62,7 +63,7 @@ public class StoreBinController extends WSHubController {
     @Path("/update")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Update Store Bin")
+    @ApiOperation(value = "Update Store Bin", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateStoreBin(Bin bin)  {
@@ -79,7 +80,7 @@ public class StoreBinController extends WSHubController {
     @Path("/delete")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Delete Store Bin")
+    @ApiOperation(value = "Delete Store Bin", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response deleteStoreBin(Bin bin)  {

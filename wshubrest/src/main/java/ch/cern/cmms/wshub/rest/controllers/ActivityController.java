@@ -9,6 +9,7 @@ import ch.cern.eam.wshub.core.services.workorders.entities.Activity;
 import ch.cern.eam.wshub.core.tools.InforException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -27,7 +28,7 @@ public class ActivityController extends WSHubController {
     @GET
     @Path("/{number}")
     @Produces("application/json")
-    @ApiOperation("Read Work Order Activities")
+    @ApiOperation(value = "Read Work Order Activities", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readWorkOrderActivities(@PathParam("number") String workOrderNumber) {
@@ -43,7 +44,7 @@ public class ActivityController extends WSHubController {
     @POST
     @Path("/{number}")
     @Produces("application/json")
-    @ApiOperation("Create Work Order Activity")
+    @ApiOperation(value = "Create Work Order Activity", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createWorkOrderActivity(@PathParam("number") String workOrderNumber, Activity activity) {
@@ -60,7 +61,7 @@ public class ActivityController extends WSHubController {
     @PUT
     @Path("/{number}")
     @Produces("application/json")
-    @ApiOperation("Update Work Order Activity")
+    @ApiOperation(value = "Update Work Order Activity", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateWorkOrderActivity(@PathParam("number") String workOrderNumber, Activity activity) {

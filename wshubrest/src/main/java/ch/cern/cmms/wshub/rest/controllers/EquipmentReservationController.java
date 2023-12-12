@@ -9,6 +9,7 @@ import ch.cern.eam.wshub.core.services.equipment.entities.EquipmentReservation;
 import ch.cern.eam.wshub.core.tools.InforException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -28,7 +29,7 @@ public class EquipmentReservationController extends WSHubController {
     @Path("/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Create Equipment Reservation")
+    @ApiOperation(value = "Create Equipment Reservation", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createEquipmentReservation(EquipmentReservation equipmentReservation) {
@@ -44,7 +45,7 @@ public class EquipmentReservationController extends WSHubController {
     @GET
     @Path("/{code}")
     @Produces("application/json")
-    @ApiOperation("Read Equipment Reservation")
+    @ApiOperation(value = "Read Equipment Reservation", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readEquipmentReservation(@PathParam("code") String code) {
@@ -62,7 +63,7 @@ public class EquipmentReservationController extends WSHubController {
     @Path("/{code}")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Update Equipment Reservation")
+    @ApiOperation(value = "Update Equipment Reservation", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateEquipmentReservation(@PathParam("code") String code, EquipmentReservation equipmentReservation) {
@@ -79,7 +80,7 @@ public class EquipmentReservationController extends WSHubController {
     @DELETE
     @Path("/{code}")
     @Produces("application/json")
-    @ApiOperation("Delete Equipment Reservation")
+    @ApiOperation(value = "Delete Equipment Reservation", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response deleteEquipmentReservation(@PathParam("code") String code) {

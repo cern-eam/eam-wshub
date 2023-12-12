@@ -10,6 +10,7 @@ import ch.cern.eam.wshub.core.services.userdefinedscreens.entities.UDTRow;
 import ch.cern.eam.wshub.core.tools.InforException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -27,7 +28,7 @@ public class UserDefinedScreenController extends WSHubController {
 
     @POST
     @Produces("application/json")
-    @ApiOperation("Create User Defined Screen Row")
+    @ApiOperation(value = "Create User Defined Screen Row", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createUserDefinedScreenRow(UDTOpBean udtOpBean) throws InforException {
@@ -42,7 +43,7 @@ public class UserDefinedScreenController extends WSHubController {
 
     @PUT
     @Produces("application/json")
-    @ApiOperation("Update User Defined Screen Row")
+    @ApiOperation(value = "Update User Defined Screen Row", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateUserDefinedScreenRow(UDTOpBean udtOpBean) throws InforException {
@@ -57,7 +58,7 @@ public class UserDefinedScreenController extends WSHubController {
 
     @DELETE
     @Produces("application/json")
-    @ApiOperation("Delete User Defined Screen Row")
+    @ApiOperation(value = "Delete User Defined Screen Row", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response deleteUserDefinedScreenRow(UDTOpBean udtOpBean) throws InforException {

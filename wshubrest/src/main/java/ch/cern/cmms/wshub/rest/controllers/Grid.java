@@ -14,6 +14,7 @@ import ch.cern.eam.wshub.core.tools.GridTools;
 import ch.cern.eam.wshub.core.tools.InforException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public class Grid extends WSHubController {
 	@Path("/data")
 	@Produces("application/json")
 	@Consumes("application/json")
-	@ApiOperation("Execute Grid Request")
+	@ApiOperation(value = "Execute Grid Request", authorizations = {@Authorization(value = "X-Auth-Token")})
 	@ApiInforAuthentication
 	@ApiInforResponse
 	public Response executeQuery(GridRequest gridRequest) {
@@ -49,7 +50,7 @@ public class Grid extends WSHubController {
 	@Path("/{gridName}/data")
 	@Produces("application/json")
 	@Consumes("application/json")
-	@ApiOperation("Execute Grid Request")
+	@ApiOperation(value = "Execute Grid Request", authorizations = {@Authorization(value = "X-Auth-Token")})
 	@ApiInforAuthentication
 	@ApiInforResponse
 	public Response executeGridQuery(@PathParam("gridName") String gridName, GridRequest gridRequest) {

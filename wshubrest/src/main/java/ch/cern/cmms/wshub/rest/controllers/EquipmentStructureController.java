@@ -11,6 +11,7 @@ import ch.cern.eam.wshub.core.services.equipment.entities.EquipmentStructure;
 import ch.cern.eam.wshub.core.tools.InforException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -32,7 +33,7 @@ public class EquipmentStructureController extends WSHubController {
     @POST
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Attach Equipment")
+    @ApiOperation(value = "Attach Equipment", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response addEquipmentToStructure(EquipmentStructure equipmentStructure) {
@@ -48,7 +49,7 @@ public class EquipmentStructureController extends WSHubController {
     @PUT
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Update Equipment Structure")
+    @ApiOperation(value = "Update Equipment Structure", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateEquipmentStructure(EquipmentStructure equipmentStructure) {
@@ -64,7 +65,7 @@ public class EquipmentStructureController extends WSHubController {
     @DELETE
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Remove Equipment From Structure")
+    @ApiOperation(value = "Remove Equipment From Structure", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response removeEquipmentFromStructure(EquipmentStructure equipmentStructure) {
@@ -81,7 +82,7 @@ public class EquipmentStructureController extends WSHubController {
     @Path("/replace")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Replace Equipment On Structure")
+    @ApiOperation(value = "Replace Equipment On Structure", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response replaceEquipmentOnStructure(EquipmentReplacement replacement) {

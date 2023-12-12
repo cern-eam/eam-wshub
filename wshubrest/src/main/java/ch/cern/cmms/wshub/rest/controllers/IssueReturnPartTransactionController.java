@@ -10,6 +10,7 @@ import ch.cern.eam.wshub.core.services.material.entities.IssueReturnPartTransact
 import ch.cern.eam.wshub.core.tools.InforException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -32,7 +33,7 @@ public class IssueReturnPartTransactionController extends WSHubController {
     @Path("/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Create Issue Return Part Transaction")
+    @ApiOperation(value = "Create Issue Return Part Transaction", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createIssueReturnPartTransaction(IssueReturnPartTransaction issueReturnPartTransaction)  {
@@ -49,7 +50,7 @@ public class IssueReturnPartTransactionController extends WSHubController {
     @Path("/list/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation("Create Multiple Issue Return Part Transactions")
+    @ApiOperation(value = "Create Multiple Issue Return Part Transactions", authorizations = {@Authorization(value = "X-Auth-Token")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createIssueReturnPartTransaction(List<IssueReturnPartTransaction> issueReturnPartTransactions)  {
