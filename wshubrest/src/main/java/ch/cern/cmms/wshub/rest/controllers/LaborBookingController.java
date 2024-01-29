@@ -28,7 +28,7 @@ public class LaborBookingController extends WSHubController {
     @GET
     @Path("/{number}")
     @Produces("application/json")
-    @ApiOperation(value = "Read Work Order Labor", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Read Work Order Labor", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readWorkOrderLaborBooking(@PathParam("number") String workOrderNumber) {
@@ -44,7 +44,7 @@ public class LaborBookingController extends WSHubController {
     @POST
     @Path("/{number}")
     @Produces("application/json")
-    @ApiOperation(value = "Book Work Order Labor", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Book Work Order Labor", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createWorkOrderLaborBooking(@PathParam("number") String workOrderNumber, LaborBooking laborBooking) {

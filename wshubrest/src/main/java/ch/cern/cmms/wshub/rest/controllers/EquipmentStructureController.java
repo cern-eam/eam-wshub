@@ -33,7 +33,7 @@ public class EquipmentStructureController extends WSHubController {
     @POST
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Attach Equipment", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Attach Equipment", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response addEquipmentToStructure(EquipmentStructure equipmentStructure) {
@@ -49,7 +49,7 @@ public class EquipmentStructureController extends WSHubController {
     @PUT
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Update Equipment Structure", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Update Equipment Structure", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateEquipmentStructure(EquipmentStructure equipmentStructure) {
@@ -65,7 +65,7 @@ public class EquipmentStructureController extends WSHubController {
     @DELETE
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Remove Equipment From Structure", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Remove Equipment From Structure", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response removeEquipmentFromStructure(EquipmentStructure equipmentStructure) {
@@ -82,7 +82,7 @@ public class EquipmentStructureController extends WSHubController {
     @Path("/replace")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Replace Equipment On Structure", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Replace Equipment On Structure", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response replaceEquipmentOnStructure(EquipmentReplacement replacement) {

@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
         @ApiImplicitParam(name="INFOR_TENANT", value = "Infor Tenant", dataType = "string", paramType = "header"),
         @ApiImplicitParam(name="INFOR_ORGANIZATION", value = "Infor Organization", defaultValue =  "*", dataType = "string", paramType = "header"),
         @ApiImplicitParam(name="INFOR_LOCALIZE_RESULTS", value = "Localize Results", defaultValue =  "true", dataType = "boolean", paramType = "header"),
-        @ApiImplicitParam(name="Authorization", value = "OIDC Auth Token", dataType = "string", paramType = "header")
+        @ApiImplicitParam(name="Authorization", value = "OIDC or Basic Auth Token", dataType = "string", paramType = "header")
 })
 @Stereotype
 @Target({ElementType.METHOD, ElementType.TYPE})

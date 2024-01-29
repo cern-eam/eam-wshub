@@ -29,7 +29,7 @@ public class CommentController extends WSHubController {
     @Path("/{entityCode}/{entityKeyCode}")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Create Comment", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Create Comment", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createComment(@PathParam("entityCode") String entityCode,
@@ -48,7 +48,7 @@ public class CommentController extends WSHubController {
     @GET
     @Path("/{entityCode}/{entityKeyCode}")
     @Produces("application/json")
-    @ApiOperation(value = "Read Comments", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Read Comments", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readComments(@PathParam("entityCode") String entityCode,
@@ -66,7 +66,7 @@ public class CommentController extends WSHubController {
     @Path("/{entityCode}/{entityKeyCode}")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Update Comment", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Update Comment", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateComment(@PathParam("entityCode") String entityCode,

@@ -32,7 +32,7 @@ public class MeterController extends WSHubController {
     @Path("/reading")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Create Meter Reading", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Create Meter Reading", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createMeterReading(MeterReading meterReading) {

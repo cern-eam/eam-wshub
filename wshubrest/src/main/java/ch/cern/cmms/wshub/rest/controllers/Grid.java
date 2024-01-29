@@ -33,7 +33,7 @@ public class Grid extends WSHubController {
 	@Path("/data")
 	@Produces("application/json")
 	@Consumes("application/json")
-	@ApiOperation(value = "Execute Grid Request", authorizations = {@Authorization(value = "X-Auth-Token")})
+	@ApiOperation(value = "Execute Grid Request", authorizations = {@Authorization(value = "basicAuth")})
 	@ApiInforAuthentication
 	@ApiInforResponse
 	public Response executeQuery(GridRequest gridRequest) {
@@ -50,7 +50,7 @@ public class Grid extends WSHubController {
 	@Path("/{gridName}/data")
 	@Produces("application/json")
 	@Consumes("application/json")
-	@ApiOperation(value = "Execute Grid Request", authorizations = {@Authorization(value = "X-Auth-Token")})
+	@ApiOperation(value = "Execute Grid Request", authorizations = {@Authorization(value = "basicAuth")})
 	@ApiInforAuthentication
 	@ApiInforResponse
 	public Response executeGridQuery(@PathParam("gridName") String gridName, GridRequest gridRequest) {

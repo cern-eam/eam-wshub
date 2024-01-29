@@ -28,7 +28,7 @@ public class UserDefinedScreenController extends WSHubController {
 
     @POST
     @Produces("application/json")
-    @ApiOperation(value = "Create User Defined Screen Row", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Create User Defined Screen Row", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createUserDefinedScreenRow(UDTOpBean udtOpBean) throws InforException {
@@ -43,7 +43,7 @@ public class UserDefinedScreenController extends WSHubController {
 
     @PUT
     @Produces("application/json")
-    @ApiOperation(value = "Update User Defined Screen Row", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Update User Defined Screen Row", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateUserDefinedScreenRow(UDTOpBean udtOpBean) throws InforException {
@@ -58,7 +58,7 @@ public class UserDefinedScreenController extends WSHubController {
 
     @DELETE
     @Produces("application/json")
-    @ApiOperation(value = "Delete User Defined Screen Row", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Delete User Defined Screen Row", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response deleteUserDefinedScreenRow(UDTOpBean udtOpBean) throws InforException {

@@ -32,7 +32,7 @@ public class LotController extends WSHubController {
     @Path("/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Create Lot", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Create Lot", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createLot(Lot lot) {

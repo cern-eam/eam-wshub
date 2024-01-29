@@ -39,7 +39,7 @@ public class WorkOrderController extends WSHubController {
     @GET
     @Path("/{number}")
     @Produces("application/json")
-    @ApiOperation(value = "Read Work Order", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Read Work Order", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readWorkOrder(@PathParam("number") String number) {
@@ -56,7 +56,7 @@ public class WorkOrderController extends WSHubController {
     @Path("/{number}")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Update Work Order", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Update Work Order", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateWorkOrder(@PathParam("number") String number, WorkOrder workOrder) {
@@ -75,7 +75,7 @@ public class WorkOrderController extends WSHubController {
     @Path("/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Create Work Order", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Create Work Order", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createWorkOrder(WorkOrder workOrder) {
@@ -92,7 +92,7 @@ public class WorkOrderController extends WSHubController {
     @DELETE
     @Path("/{number}")
     @Produces("application/json")
-    @ApiOperation(value = "Delete Work Order", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Delete Work Order", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response deleteWorkOrder(@PathParam("number") String number) {
@@ -113,7 +113,7 @@ public class WorkOrderController extends WSHubController {
     @Path("/list/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Create Multiple Work Orders", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Create Multiple Work Orders", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createWorkOrderList(List<WorkOrder> workOrders) {
@@ -129,7 +129,7 @@ public class WorkOrderController extends WSHubController {
     @GET
     @Path("/list/{workorders}")
     @Produces("application/json")
-    @ApiOperation(value = "Read Multiple Work Orders", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Read Multiple Work Orders", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readWorkOrderList(@PathParam("workorders") String workOrders) {
@@ -146,7 +146,7 @@ public class WorkOrderController extends WSHubController {
     @Path("/list/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Update Multiple Work Orders", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Update Multiple Work Orders", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateWorkOrderList(List<WorkOrder> workOrders) {
@@ -163,7 +163,7 @@ public class WorkOrderController extends WSHubController {
     @Path("/list/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Delete Multiple Work Orders", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Delete Multiple Work Orders", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response deleteWorkOrderList(List<String> workOrders) {

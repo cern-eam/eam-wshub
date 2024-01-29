@@ -29,7 +29,7 @@ public class StoreBinController extends WSHubController {
     @Path("/create")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Create Store Bin", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Create Store Bin", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createStoreBin(Bin bin)  {
@@ -46,7 +46,7 @@ public class StoreBinController extends WSHubController {
     @Path("/read")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Read Store Bin", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Read Store Bin", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readStoreBin(Bin bin)  {
@@ -63,7 +63,7 @@ public class StoreBinController extends WSHubController {
     @Path("/update")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Update Store Bin", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Update Store Bin", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateStoreBin(Bin bin)  {
@@ -80,7 +80,7 @@ public class StoreBinController extends WSHubController {
     @Path("/delete")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Delete Store Bin", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Delete Store Bin", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response deleteStoreBin(Bin bin)  {

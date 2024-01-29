@@ -28,7 +28,7 @@ public class ActivityController extends WSHubController {
     @GET
     @Path("/{number}")
     @Produces("application/json")
-    @ApiOperation(value = "Read Work Order Activities", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Read Work Order Activities")
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readWorkOrderActivities(@PathParam("number") String workOrderNumber) {
@@ -44,7 +44,7 @@ public class ActivityController extends WSHubController {
     @POST
     @Path("/{number}")
     @Produces("application/json")
-    @ApiOperation(value = "Create Work Order Activity", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Create Work Order Activity", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createWorkOrderActivity(@PathParam("number") String workOrderNumber, Activity activity) {
@@ -61,7 +61,7 @@ public class ActivityController extends WSHubController {
     @PUT
     @Path("/{number}")
     @Produces("application/json")
-    @ApiOperation(value = "Update Work Order Activity", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Update Work Order Activity", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response updateWorkOrderActivity(@PathParam("number") String workOrderNumber, Activity activity) {

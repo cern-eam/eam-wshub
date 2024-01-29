@@ -33,7 +33,7 @@ public class IssueReturnPartTransactionController extends WSHubController {
     @Path("/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Create Issue Return Part Transaction", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Create Issue Return Part Transaction", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createIssueReturnPartTransaction(IssueReturnPartTransaction issueReturnPartTransaction)  {
@@ -50,7 +50,7 @@ public class IssueReturnPartTransactionController extends WSHubController {
     @Path("/list/")
     @Produces("application/json")
     @Consumes("application/json")
-    @ApiOperation(value = "Create Multiple Issue Return Part Transactions", authorizations = {@Authorization(value = "X-Auth-Token")})
+    @ApiOperation(value = "Create Multiple Issue Return Part Transactions", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response createIssueReturnPartTransaction(List<IssueReturnPartTransaction> issueReturnPartTransactions)  {
