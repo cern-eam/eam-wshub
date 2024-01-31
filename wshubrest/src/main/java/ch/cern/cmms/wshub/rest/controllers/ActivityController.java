@@ -28,7 +28,7 @@ public class ActivityController extends WSHubController {
     @GET
     @Path("/{number}")
     @Produces("application/json")
-    @ApiOperation(value = "Read Work Order Activities")
+    @ApiOperation(value = "Read Work Order Activities", authorizations = {@Authorization(value = "basicAuth")})
     @ApiInforAuthentication
     @ApiInforResponse
     public Response readWorkOrderActivities(@PathParam("number") String workOrderNumber) {
