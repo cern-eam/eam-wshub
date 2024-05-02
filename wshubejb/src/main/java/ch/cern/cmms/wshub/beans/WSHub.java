@@ -482,6 +482,13 @@ public interface WSHub {
 			@WebParam(name = "credentials") Credentials credentials, @WebParam(name = "sessionID") String sessionID)
 			throws InforException;
 
+	//
+	// EQUIPMENT RESERVATION
+	//
+	@WebResult(name = "result")
+	public String updateEquipmentReservation(@WebParam(name = "equipmentReservation") EquipmentReservation equipmentReservation,
+								 @WebParam(name = "credentials") Credentials credentials, @WebParam(name = "sessionID") String sessionID)
+			throws InforException;
 
 	//
 	// BINS

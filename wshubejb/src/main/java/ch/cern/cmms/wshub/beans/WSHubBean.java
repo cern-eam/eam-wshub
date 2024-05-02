@@ -490,6 +490,10 @@ public class WSHubBean implements WSHub {
 		return inforClient.getPartMiscService().createPartSubstitute(inforClient.getTools().getInforContext(credentials, sessionID), partSubstitute);
 	}
 
+	public String updateEquipmentReservation(EquipmentReservation equipmentReservation, Credentials credentials, String sessionID) throws InforException {
+		return inforClient.getEquipmentReservationService().updateEquipmentReservation(inforClient.getTools().getInforContext(credentials, sessionID), equipmentReservation);
+	}
+
 	public String createStoreBin(Bin bin, Credentials credentials, String sessionID) throws InforException {
 		return inforClient.getPartMiscService().addStoreBin(inforClient.getTools().getInforContext(credentials, sessionID), bin);
 	}
