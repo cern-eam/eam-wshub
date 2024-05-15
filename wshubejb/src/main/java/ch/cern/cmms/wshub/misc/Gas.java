@@ -70,11 +70,19 @@ public class Gas {
 
         String workOrderNumber = inforClient.getWorkOrderService().createWorkOrder(inforContext, workOrder);
 
-        try {
-            addWorkOrderPart(inforContext, workOrderNumber, gasWorkOrder);
-        } catch (Exception exception) {
-            // Try for the second time if it has failed
-            addWorkOrderPart(inforContext, workOrderNumber, gasWorkOrder);
+        int attempts = 0;
+        int maxAttempts = 6;
+        while (attempts < maxAttempts) {
+            try {
+                addWorkOrderPart(inforContext, workOrderNumber, gasWorkOrder);
+                break;
+            } catch (Exception exception) {
+                // If it fails, try again
+                attempts++;
+                if (attempts == maxAttempts) {
+                    throw exception;
+                }
+            }
         }
 
         return workOrderNumber;
