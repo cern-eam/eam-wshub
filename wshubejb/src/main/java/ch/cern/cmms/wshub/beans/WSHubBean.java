@@ -696,21 +696,21 @@ public class WSHubBean implements WSHub {
 		return inforClient.getUserGroupMenuService().deleteFromMenuHierarchy(inforClient.getTools().getInforContext(credentials, sessionID), ms);
 	}
 
-	public Nonconformity readNonconformityDefault(String nc, Credentials credentials, String sessionID) throws InforException {
+	public NonConformity readNonconformityDefault(String nc, Credentials credentials, String sessionID) throws InforException {
 		return inforClient.getNonconformityService().readNonconformityDefault(inforClient.getTools().getInforContext(credentials,
 				sessionID));
 	}
-	public String createNonconformity(Nonconformity nc, Credentials credentials, String sessionID) throws InforException {
+	public String createNonconformity(NonConformity nc, Credentials credentials, String sessionID) throws InforException {
 		return inforClient.getNonconformityService().createNonconformity(inforClient.getTools().getInforContext(credentials,
 				sessionID), nc);
 	}
 
-	public Nonconformity readNonconformity(String nc, Credentials credentials, String sessionID) throws InforException {
+	public NonConformity readNonconformity(String nc, Credentials credentials, String sessionID) throws InforException {
 		return inforClient.getNonconformityService().readNonconformity(inforClient.getTools().getInforContext(credentials,
 				sessionID), nc);
 	}
 
-	public String updateNonconformity(Nonconformity nc, Credentials credentials, String sessionID) throws InforException {
+	public String updateNonconformity(NonConformity nc, Credentials credentials, String sessionID) throws InforException {
 		return inforClient.getNonconformityService().updateNonconformity(inforClient.getTools().getInforContext(credentials,
 				sessionID), nc);
 	}

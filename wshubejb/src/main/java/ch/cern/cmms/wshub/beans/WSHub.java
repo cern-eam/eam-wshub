@@ -726,22 +726,22 @@ public interface WSHub {
 	// Nonconformities
 	//
 	@WebResult(name = "result")
-	public Nonconformity readNonconformityDefault(@WebParam(name = "nonconformity") String nonconformity,
+	public NonConformity readNonconformityDefault(@WebParam(name = "nonconformity") String nonconformity,
 												   @WebParam(name = "credentials") Credentials credentials,
 												  @WebParam(name = "sessionID") String sessionID) throws InforException;
 
 	@WebResult(name = "result")
-	public String createNonconformity(@WebParam(name = "nonconformity") Nonconformity nonconformity,
+	public String createNonconformity(@WebParam(name = "nonconformity") NonConformity nonconformity,
 									  @WebParam(name = "credentials") Credentials credentials,
 									  @WebParam(name = "sessionID") String sessionID) throws InforException;
 
 	@WebResult(name = "result")
-	public Nonconformity readNonconformity(@WebParam(name = "nonconformity") String nonconformity,
+	public NonConformity readNonconformity(@WebParam(name = "nonconformity") String nonconformity,
 										   @WebParam(name = "credentials") Credentials credentials,
 										   @WebParam(name = "sessionID") String sessionID) throws InforException;
 
 	@WebResult(name = "result")
-	public String updateNonconformity(@WebParam(name = "nonconformity") Nonconformity nonconformity,
+	public String updateNonconformity(@WebParam(name = "nonconformity") NonConformity nonconformity,
 									  @WebParam(name = "credentials") Credentials credentials,
 									  @WebParam(name = "sessionID") String sessionID) throws InforException;
 
