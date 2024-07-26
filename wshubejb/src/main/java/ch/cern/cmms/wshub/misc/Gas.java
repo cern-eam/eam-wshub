@@ -12,6 +12,11 @@ import ch.cern.eam.wshub.core.tools.InforException;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.xml.bind.JAXB;
+import java.io.StringReader;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Date;
 
 import static ch.cern.eam.wshub.core.tools.Tools.generateFault;
@@ -70,32 +75,34 @@ public class Gas {
 
         String workOrderNumber = inforClient.getWorkOrderService().createWorkOrder(inforContext, workOrder);
 
-        int attempts = 0;
-        int maxAttempts = 6;
-        while (attempts < maxAttempts) {
-            try {
-                addWorkOrderPart(inforContext, workOrderNumber, gasWorkOrder);
-                break;
-            } catch (Exception exception) {
-                // If it fails, try again
-                attempts++;
-                if (attempts == maxAttempts) {
-                    throw exception;
-                }
-            }
+        String insertSQL = "INSERT INTO CERN_TASKQUEUE (TSQ_NAME, TSQ_SYSTEM, TSQ_OPERATION, TSQ_DATAREF1, TSQ_DATAREF2, TSQ_STATUS, TSQ_DATA) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = inforClient.getTools().getDataSource().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
+
+            // Set the values for the prepared statement
+            preparedStatement.setString(1, "GAS_PART");
+            preparedStatement.setString(2, "INFOR");
+            preparedStatement.setString(3, "WORKORDER_PART_ADD");
+            preparedStatement.setString(4, workOrderNumber);
+            preparedStatement.setString(5, gasWorkOrder.getSCEMCode());
+            preparedStatement.setString(6, "NEW");
+            preparedStatement.setString(7, "<workOrderPart>\n" +
+                    "    <activityCode>5</activityCode>\n" +
+                    "    <partCode>" + gasWorkOrder.getSCEMCode() + "</partCode>\n" +
+                    "    <plannedQty>" + gasWorkOrder.getSCEMCodeQuantity() + "</plannedQty>\n" +
+                    "    <plannedSource>false</plannedSource>\n" +
+                    "    <workOrderNumber>" + workOrderNumber + "</workOrderNumber>\n" +
+                    "</workOrderPart>");
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("ERROR: " + e.getMessage());
+            e.printStackTrace();
         }
 
         return workOrderNumber;
-    }
-
-    private void addWorkOrderPart(InforContext inforContext, String workOrderNumber, GasWorkOrder gasWorkOrder) throws InforException {
-        WorkOrderPart workOrderPart = new WorkOrderPart();
-        workOrderPart.setPartCode(gasWorkOrder.getSCEMCode());
-        workOrderPart.setPlannedQty(gasWorkOrder.getSCEMCodeQuantity());
-        workOrderPart.setWorkOrderNumber(workOrderNumber);
-        workOrderPart.setActivityCode("5");
-        workOrderPart.setPlannedSource("false");
-        inforClient.getWorkOrderMiscService().addWorkOrderPart(inforContext, workOrderPart);
     }
 
 
