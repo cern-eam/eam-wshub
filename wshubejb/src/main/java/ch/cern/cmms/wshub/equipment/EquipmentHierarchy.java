@@ -1,23 +1,26 @@
 package ch.cern.cmms.wshub.equipment;
 
+import java.lang.reflect.Constructor;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
+import java.util.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
+import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
+import javax.ws.rs.NotFoundException;
 
+import ch.cern.cmms.wshub.equipment.entities.*;
 import ch.cern.eam.wshub.core.client.InforClient;
 import ch.cern.eam.wshub.core.services.entities.Credentials;
-import ch.cern.cmms.wshub.equipment.entities.Edge;
-import ch.cern.cmms.wshub.equipment.entities.EquipmentGraphRequest;
-import ch.cern.cmms.wshub.equipment.entities.Graph;
-import ch.cern.cmms.wshub.equipment.entities.GraphLinkType;
-import ch.cern.cmms.wshub.equipment.entities.Node;
+import ch.cern.eam.wshub.core.services.grids.entities.GridRequestFilter;
 import ch.cern.eam.wshub.core.tools.InforException;
 
 @ApplicationScoped
@@ -144,6 +147,143 @@ public class EquipmentHierarchy {
 
 		return graph;
 
+	}
+
+	/**
+	 * For the target "code" look for connections using the procedure CAMMS.GET_EQUIPMENT_LINKS to it (where it is EQP_MAINEQP)
+	 * and from it (where it is EQP_SRCEQP) then do the same for the parents and children until maxDepth is reached.
+	 * Only consider connections of types "linkTypes". Only return at most maxRows.
+	 * @param code // R5OBJECTS code. WIll use it to look in U5EQPDEPENDENCY (EQP_MAINEQP, EQP_SRCEQP)
+	 * @param linkTypes U5EQPDEPENDENCY - EQP_DEPTYPE
+	 * @param maxDepth HLEVEL (from the procedure) max depth
+	 * @param maxRows
+	 * @return A list of ElectricalLinkDTO's
+	 */
+	public Graph readElectricalGraph(
+		EquipmentGraphRequest hierarchyrequest
+	) throws InforException {
+
+		if (hierarchyrequest == null) {
+			throw inforClient.getTools().generateFault("Please supply the necessery information ");
+		}
+		if (hierarchyrequest.getEquipmentCode() == null
+			|| hierarchyrequest.getEquipmentCode().trim().equals("")
+		) { return null; }
+		if (hierarchyrequest.getLinkTypes() == null
+			|| hierarchyrequest.getLinkTypes().trim().equals("")
+		) {
+			hierarchyrequest.setLinkTypes("POWERED_BY");
+		}
+		hierarchyrequest.setLinkTypes(hierarchyrequest.getLinkTypes());
+		if (hierarchyrequest.getMaxDepth() <= 0) {
+			hierarchyrequest.setMaxDepth(1);
+		}
+		try {
+			EntityManager entityManager = inforClient.getTools().getEntityManager();
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery("CAMMS.GET_EQUIPMENT_LINKS");
+
+			// Set the procedure parameter types
+			storedProcedureQuery.registerStoredProcedureParameter("code", String.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("linkTypes", String.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("maxDepth", Integer.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("maxRows", Integer.class, ParameterMode.IN);
+			// Set the procedure output, which is a set of rows
+			storedProcedureQuery.registerStoredProcedureParameter("dto_result", ResultSet.class, ParameterMode.REF_CURSOR);
+
+			storedProcedureQuery.setParameter("code", hierarchyrequest.getEquipmentCode());
+			// Concatenate linKTypes into a comma separated string, to be managed by the procedure. Easier than passing an array to a procedure.
+			storedProcedureQuery.setParameter("linkTypes", String.join(",", hierarchyrequest.getLinkTypes()));
+			storedProcedureQuery.setParameter("maxDepth", hierarchyrequest.getMaxDepth());
+			storedProcedureQuery.setParameter("maxRows", 100);
+
+			storedProcedureQuery.execute();
+
+			Graph returnResult = new Graph();
+			List<Object[]> queryResult = new ArrayList<>();
+			// Map each result row to the DTO class
+			for (Object[] row : queryResult) {
+				ElectricalLinkDTO dto = mapRow2DTO(row, ElectricalLinkDTO.class);
+
+				/*List<GridRequestFilter> gridFilters = new ArrayList<>(Arrays.asList(
+						new GridRequestFilter("pf1", dto.getEQP_SRCEQP(), "=", GridRequestFilter.JOINER.AND, true, false),
+						new GridRequestFilter("pf2", dto.getEQP_MAINEQP(), "=", GridRequestFilter.JOINER.OR, false, true),
+						new GridRequestFilter("pf1", dto.getEQP_MAINEQP(), "=", GridRequestFilter.JOINER.AND, true, false),
+						new GridRequestFilter("pf2", dto.getEQP_SRCEQP(), "=", GridRequestFilter.JOINER.OR, false, true),
+						new GridRequestFilter("elem1", dto.getEQP_SRCEQP(), "=", GridRequestFilter.JOINER.AND, true, false),
+						new GridRequestFilter("elem2", dto.getEQP_SRCEQP(), "=", GridRequestFilter.JOINER.OR, false, true),
+						new GridRequestFilter("elem1", dto.getEQP_SRCEQP(), "=", GridRequestFilter.JOINER.AND, true, false),
+						new GridRequestFilter("elem2", dto.getEQP_SRCEQP(), "=", null, false, true)
+				));
+				List<Cable> cables = eamCableService.getCables(gridFilters, username);
+
+				HashMap<String, Node> nodes = graph.getNodes();
+				if (!nodes.containsKey(dto.getEQP_MAINEQP())) {
+					nodes.put(
+							dto.getEQP_MAINEQP(),
+							new Node(dto.getEQP_MAINEQP(), dto.getHLEVEL())
+					);
+				}
+				HashMap<String, Edge> edges = graph.getEdges();
+				if(!edges.containsKey(dto.getEQP_ID())) {
+					edges.put(
+							dto.getEQP_ID().toString(),
+							new Edge(
+									dto.getEQP_ID(),
+									"attribute",
+									dto.getEQP_SRCEQP(),
+									dto.getEQP_MAINEQP(),
+									dto.getEQP_DEPDESC(),
+									cables
+							)
+					);
+				}*/
+			}
+			return null;
+		}
+
+		catch(Exception e) {
+			throw new NotFoundException(e.getMessage());
+		}
+	}
+
+	/**
+	 * Convert the array of Objects, corresponding to a table row, obtained by storedProcedureQuery into an array of Objects <T>.
+	 * The order of row is the same as the one returned in SQL, but the parameter names are missing. They are obtained ehre, through reflection.
+	 * @param <T>
+	 * @param row
+	 * @param DTOClass must pass the class into which to convert, not an object
+	 * @return
+	 */
+	public <T> T mapRow2DTO(
+			Object[] row,
+			Class<T> DTOClass
+	) {
+		try {
+			// Get the constructor corresponding to query row's number of values
+			Constructor<?>[] constructors = DTOClass.getConstructors();
+			Constructor<?> targetConstructor = Arrays.stream(constructors)
+					.filter(c -> c.getParameterCount() == row.length)
+					.findFirst()
+					.orElseThrow(() -> new IllegalArgumentException("No matching constructor found"));
+
+			Class[] paramTypes = targetConstructor.getParameterTypes();
+			Object[] constructorParameters = new Object[row.length];
+
+			// pipulate the constructor arguments. If new types are used by the DTO's or queries, they need to be added here.
+			for (int i = 0; i < paramTypes.length; i++) {
+				if (paramTypes[i].getName() == "java.lang.String") {
+					constructorParameters[i] = (String)row[i];
+				} else if (paramTypes[i].getName() == "java.lang.Integer") {
+					constructorParameters[i] = (Integer)row[i];
+				} else if (paramTypes[i].getName() == "java.math.BigDecimal") {
+					constructorParameters[i] = (BigDecimal)row[i];
+				}
+			}
+			// Create an object of that type with the parameters obtained
+			return (T) targetConstructor.newInstance(constructorParameters);
+		} catch (Exception e) {
+			throw new RuntimeException("Error mapping row to DTO", e);
+		}
 	}
 
 	private void reachableNodes(LinkedList<String> startNodes, LinkedList<String> finalNodes, LinkedList<Edge> edges) {

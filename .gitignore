@@ -3,6 +3,9 @@
 .project
 .DS_Store
 .idea/
+.vscode/settings.json
+.env
+.directory
 wshub.iml
 
 #IntelliJ IDEA

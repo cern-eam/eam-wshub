@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "replace-xml": "node replaceXml.js",
+    "replace-dev": "npm run replace-xml -- dev",
+    "replace-test": "npm run replace-xml -- test"
+  }
+}

@@ -5,9 +5,15 @@ public class EquipmentGraphRequest {
 	private String equipmentCode;
 	private String linkTypes;
 	private int maxDepth;
-	
 
-	
+	public EquipmentGraphRequest(String equipmentCode, String linkTypes, int maxDepth) {
+		this.equipmentCode = equipmentCode;
+		this.linkTypes = linkTypes;
+		this.maxDepth = maxDepth;
+	}
+
+	public EquipmentGraphRequest() {}
+
 	public String getLinkTypes() {
 		return linkTypes;
 	}

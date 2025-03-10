@@ -23,6 +23,7 @@ import ch.cern.cmms.wshub.rest.entities.response.Edge;
 import ch.cern.cmms.wshub.rest.entities.response.Graph;
 import ch.cern.cmms.wshub.rest.entities.response.GraphLinkType;
 import ch.cern.cmms.wshub.rest.entities.response.Node;
+import ch.cern.cmms.wshub.equipment.entities.EquipmentGraphRequest;
 
 @ManagedBean
 @Path("/hierarchy")
@@ -255,6 +256,21 @@ public class EquipmentHierarchy {
 		}
 		graph.linkTypes = links.values().toArray(new GraphLinkType[0]);
 		graph.maxDepth = maxDepth;
+	}
+
+
+	@GET
+	@Path("/electricalGraph")
+	@Produces("application/json")
+	@Consumes("application/json")
+	public String electricalGraph() {
+		EquipmentGraphRequest equipmentGraphRequest = new EquipmentGraphRequest("UIAE-201", "POWERED_BY", 100);
+		try {
+			//equipmentHierarchy.readElectricalGraph(equipmentGraphRequest);
+			return null;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	@GET
