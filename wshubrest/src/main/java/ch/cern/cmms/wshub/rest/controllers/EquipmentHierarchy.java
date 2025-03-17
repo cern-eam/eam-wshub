@@ -38,12 +38,37 @@ public class EquipmentHierarchy {
 	public Graph hierarchy(@QueryParam("parent") String parent,@QueryParam("linkTypes") String linkTypes,@QueryParam("maxDepth") int maxDepth) throws SQLException{
 
 		if (parent == null || parent.trim().equals("")) {
+			System.out.println("EXCEPTION1: No parent found");
 			return null;
 		}
-
+		if (linkTypes.length() > 200) {
+			System.out.println("EXCEPTION1: linkTypes must be shorter than 200 characters.");
+			return null;
+		}
+		linkTypes = linkTypes.replaceAll("\\s+","");
 		linkTypes = "('" + linkTypes.replace(",", "','") + "')";
 
-		String v_query = "with connections as ( " +
+		String v_query = "select eqplinks.*, eqpchild.obj_desc  CHILDDESC,  eqpchild.obj_mrc as CHILDMRC, eqpchild.obj_obrtype as CHILDTYPE, eqpchild.obj_status as CHILDSTATUSC, ucodeschild.uco_desc as CHILDSTATUSD  from ( "
+				+ "select eqplinks.*, eqpparent.obj_desc PARENTDESC, eqpparent.obj_mrc as PARENTMRC, eqpparent.obj_obrtype as PARENTTYPE, eqpparent.obj_status as PARENTSTATUSC, ucodesparent.uco_desc as PARENTSTATUSD  from ( "
+				+ "select eqplinks.* from ("
+				+ "select level as hlevel, stc_parent as PARENTCODE, stc_child as CHILDCODE, 'STRUCTURE' as LINKTYPE, 'Installed In' as LINKDESC, 'BLACK' as LINKCOLOR "
+				+ "from r5structures where stc_parent_org = '*' and stc_child_org = '*' "
+				+ "start with stc_parent = ?  " + "connect by nocycle prior stc_child = stc_parent " + "union  "
+				+ "select -1 * level as hlevel, stc_parent as PARENTCODE, stc_child as CHILDCODE, 'STRUCTURE' as LINKTYPE, 'Installed In' as LINKDESC, 'BLACK' as LINKCOLOR  "
+				+ "from r5structures where stc_parent_org = '*' and stc_child_org = '*'  "
+				+ "start with stc_child = ?  " + "connect by nocycle prior stc_parent = stc_child  " + "union "
+				+ "select level as hlevel, eqp_srceqp AS PARENTCODE, eqp_maineqp AS CHILDCODE, EQP_DEPTYPE as LINKTYPE, EDT_DESC as LINKDESC, edt_color as LINKCOLOR  "
+				+ "from u5eqpdependency, u5eqpdepentypes " + "where eqp_deptype = edt_code "
+				+ "start with eqp_maineqp = ? " + "connect by nocycle prior eqp_srceqp = eqp_maineqp " + "union "
+				+ "select -1 * level as hlevel, eqp_srceqp AS PARENTCODE, eqp_maineqp AS CHILDCODE, EQP_DEPTYPE as LINKTYPE, EDT_DESC as LINKDESC, edt_color as LINKCOLOR  "
+				+ "from u5eqpdependency, u5eqpdepentypes " + "where eqp_deptype = edt_code "
+				+ "start with eqp_srceqp = ? " + "connect by nocycle prior eqp_maineqp = eqp_srceqp "
+				+ ") EQPLINKS WHERE EQPLINKS.linktype IN "+ linkTypes + " AND ABS(HLEVEL) <= " + maxDepth
+				+ " AND ROWNUM <= 100"
+				+ ") eqplinks, r5objects eqpparent, r5ucodes ucodesparent where obj_code = eqplinks.parentcode and uco_entity = 'OBST' and uco_code = obj_status "
+				+ ") eqplinks, r5objects eqpchild, r5ucodes ucodeschild where obj_code = eqplinks.childcode and uco_entity = 'OBST' and uco_code = obj_status";
+
+		/*String v_query = "with connections as ( " +
 				"    select " +
 				"        'STRUCTURE' as LINKTYPE, " +
 				"        stc_parent as PARENTCODE, " +
@@ -90,7 +115,7 @@ public class EquipmentHierarchy {
 				"    left join R5UCODES childcodes ON childcodes.UCO_ENTITY = 'OBST' AND childcodes.UCO_CODE = p" +
 				".OBJ_STATUS " +
 				"WHERE LINKTYPE in " + linkTypes +
-				" AND ABS(HLEVEL) <= " + maxDepth + " AND ROWNUM <= 300";
+				" AND ABS(HLEVEL) <= " + maxDepth + " AND ROWNUM <= 300";*/
 
 		LinkedHashMap<String,Node> nodes = new LinkedHashMap<String,Node>();
 		LinkedList<Edge> edges = new LinkedList<Edge>();
@@ -103,6 +128,8 @@ public class EquipmentHierarchy {
 			stmt = v_connection.prepareStatement(v_query);
 			stmt.setString(1, parent.toUpperCase().trim());
 			stmt.setString(2, parent.toUpperCase().trim());
+			stmt.setString(3, parent.toUpperCase().trim());
+			stmt.setString(4, parent.toUpperCase().trim());
 
 			ResultSet rs = stmt.executeQuery();
 
