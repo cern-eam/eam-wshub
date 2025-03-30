@@ -11,6 +11,7 @@ import ch.cern.cmms.wshub.userdefinedscreens.EquipmentDependencies;
 import ch.cern.cmms.wshub.userdefinedscreens.UDTService;
 import ch.cern.cmms.wshub.userdefinedscreens.entities.EquipmentDependency;
 import ch.cern.eam.wshub.core.client.InforClient;
+import ch.cern.eam.wshub.core.client.InforContext;
 import ch.cern.eam.wshub.core.services.administration.entities.MenuSpecification;
 import ch.cern.eam.wshub.core.services.comments.entities.Comment;
 import ch.cern.eam.wshub.core.services.entities.BatchResponse;
@@ -697,8 +698,10 @@ public class WSHubBean implements WSHub {
 	}
 
 	public NonConformity readNonconformityDefault(String nc, Credentials credentials, String sessionID) throws InforException {
+		final InforContext inforContext = inforClient.getTools().getInforContext(credentials,
+				sessionID);
 		return inforClient.getNonconformityService().readNonconformityDefault(inforClient.getTools().getInforContext(credentials,
-				sessionID));
+				sessionID), inforClient.getTools().getOrganizationCode(inforContext));
 	}
 	public String createNonconformity(NonConformity nc, Credentials credentials, String sessionID) throws InforException {
 		return inforClient.getNonconformityService().createNonconformity(inforClient.getTools().getInforContext(credentials,
