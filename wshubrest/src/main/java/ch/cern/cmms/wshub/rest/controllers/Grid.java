@@ -58,7 +58,7 @@ public class Grid extends WSHubController {
 			gridRequest.setGridName(gridName);
 			GridRequestResult gridRequestResult = inforClient.getGridsService().executeQuery(authentication.getInforContext(), gridRequest);
 			LinkedList<LinkedHashMap<String, String>> collect = Arrays.stream(gridRequestResult.getRows())
-					.map(row -> GridTools.gridRequestRowMapper(row, null))
+					.map(row -> GridTools.gridRequestRowMapper(row, null, false))
 					.collect(Collectors.toCollection(LinkedList::new));
 			return ok(collect);
 		} catch (InforException e) {
