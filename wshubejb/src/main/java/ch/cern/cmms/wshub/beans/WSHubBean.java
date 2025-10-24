@@ -224,12 +224,12 @@ public class WSHubBean implements WSHub {
 		return inforClient.getWorkOrderMiscService().createTaskPlan(inforClient.getTools().getInforContext(credentials, sessionID), taskPlan);
 	}
 
-	public WorkOrderActivityCheckList[] readWOActivityChecklists(Activity activity, Credentials credentials, String sessionID) throws InforException {
-		return inforClient.getChecklistService().readWorkOrderChecklists(inforClient.getTools().getInforContext(credentials, sessionID), activity);
+	public WorkOrderActivityChecklistItem[] readWOActivityChecklists(Activity activity, Credentials credentials, String sessionID) throws InforException {
+		return inforClient.getChecklistService().readWorkOrderChecklistItems(inforClient.getTools().getInforContext(credentials, sessionID), activity);
 	}
 
-	public String updateWorkOrderChecklists(WorkOrderActivityCheckList WorkOrderChecklist, Credentials credentials, String sessionID) throws InforException {
-		return inforClient.getChecklistService().updateWorkOrderChecklist(inforClient.getTools().getInforContext(credentials, sessionID), WorkOrderChecklist);
+	public String updateWorkOrderChecklists(WorkOrderActivityChecklistItem WorkOrderChecklist, TaskPlan taskPlan, Credentials credentials, String sessionID) throws InforException {
+		return inforClient.getChecklistService().updateWorkOrderChecklistItem(inforClient.getTools().getInforContext(credentials, sessionID), WorkOrderChecklist, taskPlan);
 	}
 
 	public String createRouteEquipment(RouteEquipment routeEquipment, Credentials credentials, String sessionID) throws InforException {

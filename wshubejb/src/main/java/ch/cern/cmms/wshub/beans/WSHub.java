@@ -8,7 +8,6 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 
 import ch.cern.cmms.wshub.misc.GasWorkOrder;
-import ch.cern.eam.wshub.core.client.InforContext;
 import ch.cern.eam.wshub.core.services.administration.entities.EAMUser;
 import ch.cern.eam.wshub.core.services.administration.entities.MenuSpecification;
 import ch.cern.eam.wshub.core.services.comments.entities.Comment;
@@ -16,7 +15,6 @@ import ch.cern.eam.wshub.core.services.entities.*;
 import ch.cern.eam.wshub.core.services.equipment.entities.*;
 import ch.cern.eam.wshub.core.services.material.entities.*;
 import ch.cern.eam.wshub.core.services.userdefinedscreens.entities.UDTOpBean;
-import ch.cern.eam.wshub.core.services.userdefinedscreens.entities.UDTRow;
 import ch.cern.eam.wshub.core.services.workorders.entities.*;
 import ch.cern.eam.wshub.core.services.entities.BatchResponse;
 import ch.cern.cmms.wshub.entities.AsyncExecution;
@@ -35,7 +33,7 @@ import ch.cern.eam.wshub.core.services.workorders.entities.Activity;
 import ch.cern.eam.wshub.core.services.workorders.entities.Aspect;
 import ch.cern.eam.wshub.core.services.workorders.entities.InforCaseTask;
 import ch.cern.eam.wshub.core.services.workorders.entities.TaskplanCheckList;
-import ch.cern.eam.wshub.core.services.workorders.entities.WorkOrderActivityCheckList;
+import ch.cern.eam.wshub.core.services.workorders.entities.WorkOrderActivityChecklistItem;
 
 @Local
 @WebService(targetNamespace = "http://cern.ch/cmms/infor/wshub", name = "InforWSPortType")
@@ -141,8 +139,9 @@ public interface WSHub {
 			throws InforException;
 
 	public String updateWorkOrderChecklists(
-			@WebParam(name = "workOrderChecklist") WorkOrderActivityCheckList WorkOrderChecklist,
-			@WebParam(name = "credentials") Credentials credentials, @WebParam(name = "sessionID") String sessionID)
+			@WebParam(name = "workOrderChecklist") WorkOrderActivityChecklistItem WorkOrderChecklist,
+            @WebParam(name = "taskPlan") TaskPlan taskPlan, @WebParam(name = "credentials") Credentials credentials,
+            @WebParam(name = "sessionID") String sessionID)
 			throws InforException;
 
 	public String createRouteEquipment(@WebParam(name = "routeEquipment") RouteEquipment routeEquipment,
